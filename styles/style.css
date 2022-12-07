@@ -8,6 +8,7 @@ body {
 :root {
   --green: #5f9341;
   --white: #ffffff;
+  --red: #e31010;
 }
 
 input {
@@ -19,7 +20,7 @@ input {
   box-sizing: border-box;
 }
 
-button {
+.save-btn {
   min-width: 150px;
   min-height: 30px;
   background-color: var(--green);
@@ -29,6 +30,25 @@ button {
   padding: 10px 20px;
   border: none;
   cursor: pointer;
+}
+.clear-btn {
+  min-width: 150px;
+  min-height: 30px;
+  background-color: var(--white);
+  color: var(--green);
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  border: 1px solid var(--green);
+  cursor: pointer;
+}
+.delete-single-item {
+  cursor: pointer;
+  margin-left: 10px;
+  color: var(--green);
+}
+.delete-single-item:hover {
+  color: var(--red);
 }
 
 ul {

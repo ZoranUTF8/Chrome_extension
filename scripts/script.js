@@ -2,12 +2,15 @@
 let myLeads = [];
 
 //* Get elements
-const save_input_button = document.getElementById("input-btn");
+const save_input_button = document.getElementById("save-btn");
+const clear_input_button = document.getElementById("clear-btn");
+
 const input_el = document.getElementById("input-el");
 const unordered_list = document.getElementById("ul-el");
 
 //*  Event handlers
 save_input_button.addEventListener("click", () => get_input_value());
+clear_input_button.addEventListener("click", () => clear_input_values());
 
 //* Functions
 
@@ -43,12 +46,14 @@ const get_input_value = () => {
 const render_leads = () => {
   let listItem = "";
 
-  myLeads.forEach((lead) => {
+  myLeads.forEach((lead, indx) => {
     listItem += `
     <li>
+        <span>${indx}:</span>
         <a target='_blank' href='${lead}'>
             ${lead}
         </a>
+        <button class="delete-single-item" id="delete-single-item" onClick=(delete_single_item(${indx}))>X</button>
     </li>
 `;
   });
@@ -60,7 +65,7 @@ const render_leads = () => {
 const save_myLeads_to_localStorage = (myLeadsArray) => {
   localStorage.setItem("myLeads", JSON.stringify(myLeadsArray));
 };
-
+// Load data from localStorage
 const load_myLeads_from_localStorage = () => {
   const localStorage_data = JSON.parse(localStorage.getItem("myLeads"));
 
@@ -69,5 +74,25 @@ const load_myLeads_from_localStorage = () => {
     render_leads(myLeads);
   }
 };
-
+//  check if any data isndie local storage
 load_myLeads_from_localStorage();
+
+// Clear all data from local storage
+const clear_input_values = () => {
+  localStorage.clear();
+  myLeads = [];
+  render_leads();
+  alert("All data cleared.");
+};
+
+// Delete single item from local storage and local array
+const delete_single_item = (indx) => {
+  let filteredArray = JSON.parse(localStorage.getItem("myLeads")).filter(
+    (entry, index) => index !== indx
+  );
+  myLeads = [...filteredArray];
+
+  save_myLeads_to_localStorage(filteredArray);
+
+  render_leads();
+};
