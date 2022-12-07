@@ -87,12 +87,13 @@ const clear_input_values = () => {
 
 // Delete single item from local storage and local array
 const delete_single_item = (indx) => {
-  let filteredArray = JSON.parse(localStorage.getItem("myLeads")).filter(
-    (entry, index) => index !== indx
-  );
-  myLeads = [...filteredArray];
+  myLeads = [
+    ...JSON.parse(localStorage.getItem("myLeads")).filter(
+      (entry, index) => index !== indx
+    ),
+  ];
 
-  save_myLeads_to_localStorage(filteredArray);
+  save_myLeads_to_localStorage(myLeads);
 
   render_leads();
 };
