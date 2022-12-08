@@ -3,14 +3,15 @@ let myLeads = [];
 
 //* Get elements
 const save_input_button = document.getElementById("save-btn");
+const save_current_tab_button = document.getElementById("save-tab-btn");
 const clear_input_button = document.getElementById("clear-btn");
-
 const input_el = document.getElementById("input-el");
 const unordered_list = document.getElementById("ul-el");
 
 //*  Event handlers
 save_input_button.addEventListener("click", () => get_input_value());
 clear_input_button.addEventListener("click", () => clear_input_values());
+save_current_tab_button.addEventListener("click", () => save_current_tab());
 
 //* Functions
 
@@ -22,7 +23,6 @@ const add_value_to_my_lead = (item) => {
   } else {
     alert("Item already added.");
   }
-  return;
 };
 
 // Get the input value from the text input field
@@ -43,10 +43,10 @@ const get_input_value = () => {
 };
 
 // Render the myLeads array if items are present
-const render_leads = () => {
+const render_leads = (leadsArr) => {
   let listItem = "";
 
-  myLeads.forEach((lead, indx) => {
+  leadsArr.forEach((lead, indx) => {
     listItem += `
     <li>
         <span>${indx}:</span>
@@ -89,11 +89,25 @@ const clear_input_values = () => {
 const delete_single_item = (indx) => {
   myLeads = [
     ...JSON.parse(localStorage.getItem("myLeads")).filter(
-      (entry, index) => index !== indx
+      (_, index) => index !== indx
     ),
   ];
-
+  console.log(myLeads);
   save_myLeads_to_localStorage(myLeads);
 
-  render_leads();
+  render_leads(myLeads);
+};
+
+// Add the current tab to the myLeads array
+const save_current_tab = () => {
+  chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    // since only one tab should be active and in the current window at once
+    // the return variable should only have one entry
+    let activeTab = tabs[0];
+    console.log(activeTab);
+
+    myLeads.push(tabs[0].url);
+    save_myLeads_to_localStorage(myLeads);
+    render_leads(myLeads);
+  });
 };
